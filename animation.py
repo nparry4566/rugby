@@ -13,13 +13,21 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 crowd = pygame.transform.scale (pygame.image.load("crowd.png"),(900,200))
 sun = pygame.transform.scale (pygame.image.load("sun.png"),(80,80))
-
+rugbyball = pygame.transform.scale (pygame.image.load("rugbyball.png"),(35,20))
 screen = pygame.display.set_mode(size)
 
 clock = pygame.time.Clock()
 
-
+ballx = 400
+bally = 500
 done = True
+changex = 0
+
+file = 'cheer.ogg'
+pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load(file)
+
 
 #game loop
 while done:
@@ -34,11 +42,26 @@ while done:
     pygame.draw.rect(screen,white , (250,50,10,400))
     pygame.draw.rect(screen,white , (500,50,10,400))
     pygame.draw.rect(screen,white , (250,225,250,10))
+    ballx += changex
+    bally -= 4
+    screen.blit(rugbyball,[ballx,bally,0,200])
     
+    if bally < 0:
+        ballx = 400
+        bally = 500
+        changex = random.uniform(-5,5)
+        pygame.mixer.music.stop()
 
+    if bally < 225 and ballx > 255 and ballx < 475:
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.play()
+        
+        
     #update
     pygame.display.flip()
-    clock.tick(40)
+    clock.tick(50)
+
+    
 
     
 
